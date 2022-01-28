@@ -4,22 +4,14 @@ import { nanoid } from "nanoid";
 import ListForm from "./Components/listForm/listForm.js";
 import Form from "./Components/form/form.js";
 import Filter from "./Components/filter/Filter.js";
+import hooks from './hooks/appHooks'
 
-const useLocalStorage = (key, defaultValue) => {
-  const [state,setState] = useState(() => {
-     const contacts = localStorage.getItem("phonebook");
-    if (!contacts) {
-      return;
-    }
-    return JSON.parse(window.localStorage.getItem(key)) ?? defaultValue;
-  });
-  return [state ,setState]
-}
+
 
 export default function App (){
 
 
-  const [contacts, setContacts] = useLocalStorage('phonebook' , [] )
+  const [contacts, setContacts] = hooks.useLocalStorage('phonebook' , [] )
   const[filter, setFilter] = useState('');
 
   useEffect(() => {
@@ -28,7 +20,6 @@ export default function App (){
 , [contacts])
   
   const formSubmitHandler = (data) => {
-   console.log (contacts)
     data.id = nanoid();
   contacts.find((contact) =>contact.name.toLocaleLowerCase() 
   === data.name.toLocaleLowerCase() )
@@ -57,12 +48,12 @@ export default function App (){
   };
     return (
       <div>
-        <Form onSubmit={formSubmitHandler} valueForm={contacts}></Form>
-        <Filter valueFilter={filter} onChange={changeFilter}></Filter>
+        <Form onSubmit={formSubmitHandler} valueForm={contacts}/>
+        <Filter valueFilter={filter} onChange={changeFilter}/>
         <ListForm
           onContacts={findContact}
           onDelete={deletedContact}
-        ></ListForm>
+        />
       </div>
     );
   }
